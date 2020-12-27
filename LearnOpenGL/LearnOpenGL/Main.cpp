@@ -69,10 +69,36 @@ int main() {
 	char infoLog[512]; //String to contain an error log message
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success); //Get the compile status of vertex shader
 
-	if (!success)
+	if (!success) //If compilation of vertex shader was not successful, print error message
 	{
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	//Create and compile fragment shader
+
+	//fragment shader source code
+	const char* fragmentShaderSource = "#version 330 core\n"
+		"    out vec4 FragColor;\n"
+		"    \n"
+		"void main()\n"
+		"{\n"
+		"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+		"}\n";
+
+	//Create fragment shader
+	unsigned int fragmentShader;
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL); //Attach shader source code
+	glCompileShader(fragmentShader); //compile shader
+
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success); //Get the compile status of fragment shader
+
+	if (!success) //If compilation of fragment shader was not successful, print error message
+	{
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
 	//Now we work on drawing a triangle

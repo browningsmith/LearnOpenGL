@@ -3,10 +3,15 @@
 #include <iostream>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
 
 int main() {
 
-	glfwInit(); //Initialize glfw
+	if (!glfwInit()) { //Initialize glfw
+
+		std::cout << "Failed to initialize GLFW" << std::endl;
+		return -1;
+	}
 
 	//Ensure version 3.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -46,6 +51,8 @@ int main() {
 	//Main render loop
 	while (!glfwWindowShouldClose(window))
 	{
+		processInput(window); //Process user input
+
 		glfwSwapBuffers(window); //Display new frame
 		glfwPollEvents(); //Get user input
 
@@ -70,4 +77,21 @@ int main() {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 	glViewport(0, 0, width, height); //Resize viewport to match dimensions of window
+}
+
+/*
+ * Function processInput
+ *
+ * Input: GLFWwindow* window
+ * Output: void
+ *
+ * Function to be called on each render to check for user input
+ */
+
+void processInput(GLFWwindow* window) {
+
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+
+		glfwSetWindowShouldClose(window, true);
+	}
 }

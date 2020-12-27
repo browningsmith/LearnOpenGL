@@ -45,8 +45,52 @@ int main() {
 	//Tell GLFW to call framebuffer_size_callback when the window is resized
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	//Set clear color to  red
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	//Set clear color to black
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+	//Create and compile vertex shader
+
+	//Vertex shader source code
+	const char* vertexShaderSource = "#version 330 core\n"
+		"layout (location = 0) in vec3 aPos;\n"
+		"void main()\n"
+		"{\n"
+		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"}\0";
+
+	//Create vertex shader
+	unsigned int vertexShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); //Attach shader source code
+	glCompileShader(vertexShader); //compile shader
+
+	int success; //Variable to contain vertex shader compilation status
+	char infoLog[512]; //String to contain an error log message
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success); //Get the compile status of vertex shader
+
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	//Now we work on drawing a triangle
+
+	//Triangle coordinates
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f
+	};
+
+	//Create vertex buffer
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	//Copy over vertex data
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	//Main render loop
 	while (!glfwWindowShouldClose(window))

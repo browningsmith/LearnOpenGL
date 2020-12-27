@@ -1,2 +1,6 @@
 .vs
 */.vs/*
+LearnOpenGL/Debug*
+LearnOpenGL/x64*
+LearnOpenGL/LearnOpenGL/Debug*
+LearnOpenGL/LearnOpenGL/x64*

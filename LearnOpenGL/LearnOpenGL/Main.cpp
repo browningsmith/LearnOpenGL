@@ -101,6 +101,26 @@ int main() {
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
+	//Link the vertex shader and fragment shader into a complete shader program
+	unsigned int shaderProgram;
+	shaderProgram = glCreateProgram();
+
+	glAttachShader(shaderProgram, vertexShader); //Attach vertex shader
+	glAttachShader(shaderProgram, fragmentShader); //Attach fragment shader
+	glLinkProgram(shaderProgram); //Link
+
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success); //Get the compile status of fragment shader
+
+	if (!success) //If the program linking was not successful, print error message
+	{
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	//Delete vertex and fragment shaders now that the shader program has been compiled
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
 	//Now we work on drawing a triangle
 
 	//Triangle coordinates
@@ -110,7 +130,12 @@ int main() {
 		 0.0f,  0.5f, 0.0f
 	};
 
-	//Create vertex buffer
+	//Create vertex array object to store the following vertex buffer object configuration
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	//Create vertex buffer object
 	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -118,15 +143,28 @@ int main() {
 	//Copy over vertex data
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	//Assign VBO, which should still be bound to array buffer, to location 0 in the vertex shader
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0); //Enable the vertex attribute
+
 	//Main render loop
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window); //Process user input
 
-		glfwSwapBuffers(window); //Display new frame
-		glfwPollEvents(); //Get user input
+		//Tell OpenGL to use this shader program for rendering
+		glUseProgram(shaderProgram);
+
+		//Bind the proper VAO
+		glBindVertexArray(VAO);
 
 		glClear(GL_COLOR_BUFFER_BIT); //Clear the window
+
+		//Draw the triangle
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glfwSwapBuffers(window); //Display new frame
+		glfwPollEvents(); //Get user input
 	}
 
 	glfwTerminate(); //Terminate GLFW

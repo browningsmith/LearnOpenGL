@@ -78,7 +78,7 @@
     <LibraryPath>C:\Program Files %28x86%29\OpenGL_Project_Resources\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\OpenGL_Project_Resources\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\keithsmith\Desktop\LearnOpenGL\LearnOpenGL\LearnOpenGL\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\OpenGL_Project_Resources\lib\GLFW;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

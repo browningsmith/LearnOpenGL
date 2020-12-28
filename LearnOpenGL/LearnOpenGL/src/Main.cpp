@@ -152,13 +152,13 @@ int main() {
 	{
 		processInput(window); //Process user input
 
+		glClear(GL_COLOR_BUFFER_BIT); //Clear the window
+
 		//Tell OpenGL to use this shader program for rendering
 		glUseProgram(shaderProgram);
 
 		//Bind the proper VAO
 		glBindVertexArray(VAO);
-
-		glClear(GL_COLOR_BUFFER_BIT); //Clear the window
 
 		//Draw the triangle
 		glDrawArrays(GL_TRIANGLES, 0, 3);

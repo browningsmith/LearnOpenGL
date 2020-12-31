@@ -4,7 +4,6 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-
 int main() {
 
 	if (!glfwInit()) { //Initialize glfw
@@ -81,9 +80,11 @@ int main() {
 	const char* fragmentShaderSource = "#version 330 core\n"
 		"    out vec4 FragColor;\n"
 		"    \n"
+		"    \n"
+		"    uniform vec4 myColor;\n"
 		"void main()\n"
 		"{\n"
-		"    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+		"    FragColor = myColor;\n"
 		"}\n";
 
 	//Create fragment shader
@@ -147,6 +148,9 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0); //Enable the vertex attribute
 
+	//Get the location of the myColor uniform
+	int vertexColorLocation = glGetUniformLocation(shaderProgram, "myColor");
+
 	//Main render loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -159,6 +163,11 @@ int main() {
 
 		//Bind the proper VAO
 		glBindVertexArray(VAO);
+
+		float timeValue = glfwGetTime(); //Get current time
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f; //Sett green value to be a sin wave based on current time
+		
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 		//Draw the triangle
 		glDrawArrays(GL_TRIANGLES, 0, 3);

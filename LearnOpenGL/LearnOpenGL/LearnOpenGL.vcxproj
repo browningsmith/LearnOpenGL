@@ -23,11 +23,11 @@
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\shader.fs" />
-    <None Include="shaders\shader.vs" />
+    <None Include="resources\shaders\shader.fs" />
+    <None Include="resources\shaders\shader.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\shader_s.h" />
+    <Image Include="resources\textures\wall.jpg" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

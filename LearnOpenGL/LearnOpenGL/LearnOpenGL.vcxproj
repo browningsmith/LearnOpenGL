@@ -29,6 +29,9 @@
   <ItemGroup>
     <Image Include="resources\textures\wall.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\shader_s.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{B50D6330-D0CD-4A40-88C3-3C3D4A98282B}</ProjectGuid>
@@ -85,7 +88,7 @@
     <LibraryPath>C:\Program Files %28x86%29\OpenGL_Project_Resources\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\chief\OneDrive\Desktop\LearnOpenGL\LearnOpenGL\LearnOpenGL\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\chief\OneDrive\Desktop\LearnOpenGL\LearnOpenGL\LearnOpenGL\include;C:\Users\keithsmith\Desktop\LearnOpenGL\LearnOpenGL\LearnOpenGL\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\OpenGL_Project_Resources\lib\GLFW;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

@@ -17,8 +17,8 @@ public:
     FShaderProgram(const char* VertexFilePath, const char* FragmentFilePath)
     {
         // 1. retrieve the vertex/fragment source code from filePath
-        std::string VertexShaderCodeNonNullTerminated;
-        std::string FragmentShaderCodeNonNullTerminated;
+        std::string VertexShaderCode;
+        std::string FragmentShaderCode;
         std::ifstream VertexShaderFile;
         std::ifstream FragmentShaderFile;
         // ensure ifstream objects can throw exceptions:
@@ -37,25 +37,25 @@ public:
             VertexShaderFile.close();
             FragmentShaderFile.close();
             // convert stream into string
-            VertexShaderCodeNonNullTerminated   = VertexShaderStream.str();
-            FragmentShaderCodeNonNullTerminated = FragmentShaderStream.str();
+            VertexShaderCode   = VertexShaderStream.str();
+            FragmentShaderCode = FragmentShaderStream.str();
         }
         catch (std::ifstream::failure& e)
         {
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
         }
-        const char* VertexShaderCode = VertexShaderCodeNonNullTerminated.c_str();
-        const char * FragmentShaderCode = FragmentShaderCodeNonNullTerminated.c_str();
+        const char* VertexShaderCodeNullTerminated = VertexShaderCode.c_str();
+        const char * FragmentShaderCodeNullTerminated = FragmentShaderCode.c_str();
         // 2. compile shaders
         unsigned int VertexShaderID, FragmentShaderID;
         // vertex shader
         VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(VertexShaderID, 1, &VertexShaderCode, NULL);
+        glShaderSource(VertexShaderID, 1, &VertexShaderCodeNullTerminated, NULL);
         glCompileShader(VertexShaderID);
         checkCompileErrors(VertexShaderID, "VERTEX");
         // fragment Shader
         FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(FragmentShaderID, 1, &FragmentShaderCode, NULL);
+        glShaderSource(FragmentShaderID, 1, &FragmentShaderCodeNullTerminated, NULL);
         glCompileShader(FragmentShaderID);
         checkCompileErrors(FragmentShaderID, "FRAGMENT");
         // shader Program

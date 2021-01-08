@@ -8,17 +8,17 @@
 #include <sstream>
 #include <iostream>
 
-class FShader
+class FShaderProgram
 {
 public:
-    unsigned int ID;
+    unsigned int ProgramID;
     // constructor generates the shader on the fly
     // ------------------------------------------------------------------------
-    FShader(const char* VertexFilePath, const char* FragmentFilePath)
+    FShaderProgram(const char* VertexFilePath, const char* FragmentFilePath)
     {
         // 1. retrieve the vertex/fragment source code from filePath
-        std::string VertexCode;
-        std::string FragmentCode;
+        std::string VertexShaderCodeNonNullTerminated;
+        std::string FragmentShaderCodeNonNullTerminated;
         std::ifstream VertexShaderFile;
         std::ifstream FragmentShaderFile;
         // ensure ifstream objects can throw exceptions:
@@ -37,58 +37,58 @@ public:
             VertexShaderFile.close();
             FragmentShaderFile.close();
             // convert stream into string
-            VertexCode   = VertexShaderStream.str();
-            FragmentCode = FragmentShaderStream.str();
+            VertexShaderCodeNonNullTerminated   = VertexShaderStream.str();
+            FragmentShaderCodeNonNullTerminated = FragmentShaderStream.str();
         }
         catch (std::ifstream::failure& e)
         {
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
         }
-        const char* VertexShaderCode = VertexCode.c_str();
-        const char * FragmentShaderCode = FragmentCode.c_str();
+        const char* VertexShaderCode = VertexShaderCodeNonNullTerminated.c_str();
+        const char * FragmentShaderCode = FragmentShaderCodeNonNullTerminated.c_str();
         // 2. compile shaders
-        unsigned int Vertex, Fragment;
+        unsigned int VertexShaderID, FragmentShaderID;
         // vertex shader
-        Vertex = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(Vertex, 1, &VertexShaderCode, NULL);
-        glCompileShader(Vertex);
-        checkCompileErrors(Vertex, "VERTEX");
+        VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(VertexShaderID, 1, &VertexShaderCode, NULL);
+        glCompileShader(VertexShaderID);
+        checkCompileErrors(VertexShaderID, "VERTEX");
         // fragment Shader
-        Fragment = glCreateShader(GL_FRAGMENT_SHADER);
-        glShaderSource(Fragment, 1, &FragmentShaderCode, NULL);
-        glCompileShader(Fragment);
-        checkCompileErrors(Fragment, "FRAGMENT");
+        FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(FragmentShaderID, 1, &FragmentShaderCode, NULL);
+        glCompileShader(FragmentShaderID);
+        checkCompileErrors(FragmentShaderID, "FRAGMENT");
         // shader Program
-        ID = glCreateProgram();
-        glAttachShader(ID, Vertex);
-        glAttachShader(ID, Fragment);
-        glLinkProgram(ID);
-        checkCompileErrors(ID, "PROGRAM");
+        ProgramID = glCreateProgram();
+        glAttachShader(ProgramID, VertexShaderID);
+        glAttachShader(ProgramID, FragmentShaderID);
+        glLinkProgram(ProgramID);
+        checkCompileErrors(ProgramID, "PROGRAM");
         // delete the shaders as they're linked into our program now and no longer necessary
-        glDeleteShader(Vertex);
-        glDeleteShader(Fragment);
+        glDeleteShader(VertexShaderID);
+        glDeleteShader(FragmentShaderID);
     }
     // activate the shader
     // ------------------------------------------------------------------------
     void Use() 
     { 
-        glUseProgram(ID); 
+        glUseProgram(ProgramID);
     }
     // utility uniform functions
     // ------------------------------------------------------------------------
     void setBool(const std::string &name, bool value) const
     {         
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value); 
+        glUniform1i(glGetUniformLocation(ProgramID, name.c_str()), (int)value); 
     }
     // ------------------------------------------------------------------------
     void setInt(const std::string &name, int value) const
     { 
-        glUniform1i(glGetUniformLocation(ID, name.c_str()), value); 
+        glUniform1i(glGetUniformLocation(ProgramID, name.c_str()), value); 
     }
     // ------------------------------------------------------------------------
     void setFloat(const std::string &name, float value) const
     { 
-        glUniform1f(glGetUniformLocation(ID, name.c_str()), value); 
+        glUniform1f(glGetUniformLocation(ProgramID, name.c_str()), value); 
     }
 
 private:
